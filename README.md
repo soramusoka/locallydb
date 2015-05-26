@@ -5,7 +5,5 @@ An embedded JavaScript NoSql database for Node.js and node-webkit, designed to s
 
 **For documentation, usage, and examples, see: [http://wamalaka.com/locallydb/](http://wamalaka.com/locallydb/)**
 
-## LocallyDB async implementation
-### The fork doesn't exists in NPM and doesn't match with original project. Be carefull
-
-// mark
+#### LocallyDB async implementation
+##### Warning! The fork doesn't exists in NPM and doesn't match with original project. Be carefull
