@@ -1,52 +1,52 @@
-(function() {
+(function () {
   var List, _;
 
   _ = require('underscore');
 
-  List = (function() {
+  List = (function () {
     function List(items) {
       this.items = items != null ? items : [];
     }
 
-    List.prototype.toArray = function() {
+    List.prototype.toArray = function () {
       return this.items;
     };
 
-    List.prototype.length = function() {
+    List.prototype.length = function () {
       return this.items.length;
     };
 
-    List.prototype.push = function(element) {
+    List.prototype.push = function (element) {
       return this.items.push(element);
     };
 
-    List.prototype.pop = function(element) {
+    List.prototype.pop = function (element) {
       return this.items.pop(element);
     };
 
-    List.prototype.shift = function(element) {
+    List.prototype.shift = function (element) {
       return this.items.shift(element);
     };
 
-    List.prototype.unshift = function(element) {
+    List.prototype.unshift = function (element) {
       return this.items.unshift(element);
     };
 
-    List.prototype.clear = function() {
+    List.prototype.clear = function () {
       return this.items = [];
     };
 
-    List.prototype.remove = function(from, to) {
+    List.prototype.remove = function (from, to) {
       var rest;
       rest = this.items.slice((to || from) + 1 || this.items.length);
       this.items.length = from < 0 ? this.items.length + from : from;
       return this.items.push.apply(this.items, rest);
     };
 
-    List.prototype.where = function(selection) {
+    List.prototype.where = function (selection) {
       if (typeof selection === 'string') {
         selection = selection.replace(/@/g, 'element.');
-        return new List(_.filter(this.items, function(element) {
+        return new List(_.filter(this.items, function (element) {
           _ = require('underscore');
           return eval(selection);
         }));
@@ -55,17 +55,17 @@
       }
     };
 
-    List.prototype.sort = function(method) {
+    List.prototype.sort = function (method) {
       method = method.replace(/@/g, 'element.');
-      return new List(_.sortBy(this.items, function(element) {
+      return new List(_.sortBy(this.items, function (element) {
         _ = require('underscore');
         return eval(method);
       }));
     };
 
-    List.prototype.group = function(method) {
+    List.prototype.group = function (method) {
       method = method.replace(/@/g, 'element.');
-      return _.groupBy(this.items, function(element) {
+      return _.groupBy(this.items, function (element) {
         _ = require('underscore');
         return eval(method);
       });

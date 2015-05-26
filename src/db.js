@@ -1,13 +1,12 @@
-(function() {
+(function () {
   var Collection, DB, fs, path;
 
   fs = require('fs');
-
   path = require('path');
-
   Collection = require('./collection');
 
-  DB = (function() {
+  DB = (function () {
+
     function DB(path1) {
       var stats;
       this.path = path1;
@@ -21,20 +20,20 @@
       }
     }
 
-    DB.prototype.collection = function(name, autosave) {
+    DB.prototype.collection = function (name, autosave) {
       if (autosave == null) {
         autosave = true;
       }
       return new Collection(name, this, autosave);
     };
 
-    DB.prototype.removeCollection = function(name) {
+    DB.prototype.removeCollection = function (name) {
       var collection;
       collection = this.collection(name);
       return fs.unlinkSync(collection._cpath);
     };
 
-    DB.prototype.getCollectionNames = function() {
+    DB.prototype.getCollectionNames = function () {
       var _path, file, i, j, len, list, res;
       list = fs.readdirSync(this.path);
       res = [];
@@ -44,7 +43,7 @@
         try {
           JSON.parse(fs.readFileSync(_path, 'utf8'));
           res.push(file);
-        } catch (_error) {}
+        } catch (_error) { }
       }
       return res;
     };
