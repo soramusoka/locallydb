@@ -159,6 +159,26 @@ describe('#collection', function () {
 			done();
 		});
 	});
+
+	describe('#where', function () {
+		var id;
+		beforeEach(function (done) {
+			collection.insert({ whereProp: 1 }, function (err, result) {
+				id = result;
+				done();
+			});
+		});
+		it('should return all collection', function (done) {
+			var result = collection.where().items; // items - WTF???  
+			expect(result.length > 0).toBe(true);
+			done();
+		});
+		it('should return all collection', function (done) {
+			var result = collection.where({ whereProp: 1 }).items;
+			expect(result.length === 2).toBe(true);
+			done();
+		});
+	});
 	
 	// TODO: Add tests for upsert
 });

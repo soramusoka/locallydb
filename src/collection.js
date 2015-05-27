@@ -20,6 +20,12 @@
   Collection = (function (superClass) {
     extend(Collection, superClass);
 
+    /**
+     * Constructor
+     * @param {string} name
+     * @param {*} db
+     * @param {boolean} autosave
+     */
     function Collection(name, db, autosave) {
       var data;
       this.name = name;
@@ -53,6 +59,10 @@
       }
     }
 
+    /**
+     * Save collection into the file
+     * @param {function} callback
+     */
     Collection.prototype.save = function (callback) {
       this.header['$updated'] = (new Date).toJSON();
       var data = JSON.stringify({
@@ -62,6 +72,11 @@
       return fs.writeFile(this._cpath, data, callback || function () { });
     };
 
+    /**
+     * Insert item into the collection
+     * @param {*} element
+     * @param {function} callback
+     */
     Collection.prototype.insert = function (element, callback) {
       var date, elem, j, len, result;
       if (element instanceof Array) {
@@ -93,26 +108,41 @@
       callback && callback(null, result);
     };
 
+    /**
+     * Update item or insert
+     * @param {*} element
+     * @param {string} key
+     * @param {*} value
+     * @param {function} callback
+     */
     Collection.prototype.upsert = function (element, key, value, callback) {
-      var check;
-      check = this.where("(@" + key + " ==  '" + value + "')");
+      var check = this.where("(@" + key + " ==  '" + value + "')");
       if (check.length > 0) {
         return this.update(check[0].cid, element, callback || function () { });
       }
       this.insert(element, callback || function () { });
     };
 
+    /**
+     * Return items by id
+     * @param {number} cid
+     * @param {function} callback
+     */
     Collection.prototype.get = function (cid, callback) {
-      var result = _.findWhere(this.items, {
-        'cid': cid
-      });
+      var result = _.findWhere(this.items, { 'cid': cid });
       var error = null;
       if (!result) {
-        error = new Error('Wrong ID. Element does not exist');
+        error = new Error('Element does not exist.');
       }
       callback && callback(error, result || null);
     };
 
+    /**
+     * Update items
+     * @param {number} cid
+     * @param {*} obj
+     * @param {function} callback
+     */
     Collection.prototype.update = function (cid, obj, callback) {
       var element, i, j, key, len, ref, result;
       ref = this.items;
@@ -138,6 +168,12 @@
       callback && callback(null, result);
     };
 
+    /**
+     * Replace existing item
+     * @param {number} cid
+     * @param {*} obj
+     * @param {function} callback
+     */
     Collection.prototype.replace = function (cid, obj, callback) {
       var element, i, j, key, len, ref, result;
       ref = this.items;
@@ -151,8 +187,6 @@
             delete this.items[i][key];
           }
           obj['$updated'] = (new Date).toJSON();
-          
-          // todo: hasOwnProperty
           for (key in obj) {
             this.items[i][key] = obj[key];
           }
@@ -168,6 +202,11 @@
       callback && callback(null, result);
     };
 
+    /**
+     * Remove item from collection
+     * @param {number} cid
+     * @param {function} callback
+     */
     Collection.prototype.remove = function (cid, callback) {
       var element, i, j, len, ref, result;
       ref = this.items;
@@ -188,6 +227,12 @@
       callback && callback(null, result);
     };
 
+    /**
+     * Delete property from Objects
+     * @param {number} cid
+     * @param {string} property
+     * @param {function} callback
+     */
     Collection.prototype.deleteProperty = function (cid, property, callback) {
       var element, i, j, k, len, len1, properties, ref, result;
       ref = this.items;
